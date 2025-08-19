@@ -21,21 +21,13 @@ export const addTeam = async (req: Request<{}, {}, Team>, res: Response) => {
     return res.status(400).json({ errors: parseResult.error.message });
   }
 
-  const {
-    name,
-    short_name,
-    competition_id,
-    city,
-    country_code,
-    founded,
-    stadium,
-  } = req.body;
+  const { name, short_name, city, country_code, founded, stadium } = req.body;
 
   try {
     const result = await pool.query(
       `INSERT INTO teams (name, short_name, competition_id, city, country_code, founded, stadium)
-      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [name, short_name, competition_id, city, country_code, founded, stadium]
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [name, short_name, city, country_code, founded, stadium]
     );
 
     res.status(201).json(result.rows[0]);
