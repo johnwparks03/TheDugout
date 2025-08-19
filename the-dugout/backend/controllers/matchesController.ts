@@ -52,3 +52,26 @@ export const addMatch = async (req: Request<{}, {}, Match>, res: Response) => {
     res.status(500).send('Server Error');
   }
 };
+
+export const deleteMatch = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM matches WHERE match_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    res.status(200).json({
+      message: 'Match deleted successfully',
+      match: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error deleting match:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

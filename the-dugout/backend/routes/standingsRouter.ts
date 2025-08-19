@@ -1,7 +1,11 @@
 //Defines competitions API endpoint
 
 import { Router } from 'express';
-import { addStanding, getStandings } from '../controllers/standingsController';
+import {
+  addStanding,
+  deleteStanding,
+  getStandings,
+} from '../controllers/standingsController';
 
 const standingsRouter = Router();
 
@@ -10,5 +14,8 @@ standingsRouter.get('/', getStandings);
 
 // POST /api/standings
 standingsRouter.post('/', addStanding);
+
+// DELETE /api/standings
+standingsRouter.delete('/:id', deleteStanding);
 
 export default standingsRouter;

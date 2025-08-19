@@ -57,3 +57,26 @@ export const addPlayerStats = async (
     res.status(500).send('Server Error');
   }
 };
+
+export const deletePlayerStats = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM player_stats WHERE player_stats_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Player stats not found' });
+    }
+
+    res.status(200).json({
+      message: 'PLayer stats deleted successfully',
+      playerStats: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error deleting player stats:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

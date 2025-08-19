@@ -1,7 +1,11 @@
 //Defines competitions API endpoint
 
 import { Router } from 'express';
-import { addPlayer, getPlayers } from '../controllers/playersController';
+import {
+  addPlayer,
+  deletePlayer,
+  getPlayers,
+} from '../controllers/playersController';
 
 const playersRouter = Router();
 
@@ -10,5 +14,8 @@ playersRouter.get('/', getPlayers);
 
 // POST /api/players
 playersRouter.post('/', addPlayer);
+
+// DELETE /api/players
+playersRouter.delete('/:id', deletePlayer);
 
 export default playersRouter;

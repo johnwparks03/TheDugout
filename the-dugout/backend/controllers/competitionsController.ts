@@ -39,3 +39,28 @@ export const addCompetition = async (
     res.status(500).send('Server Error');
   }
 };
+
+export const deleteCompetition = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM competitions WHERE competition_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Competition not found' });
+    }
+
+    res
+      .status(200)
+      .json({
+        message: 'Competition deleted successfully',
+        competition: result.rows[0],
+      });
+  } catch (err) {
+    console.error('Error deleting competition:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

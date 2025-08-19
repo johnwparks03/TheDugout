@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import {
   addPlayerStats,
+  deletePlayerStats,
   getPlayerStats,
 } from '../controllers/playerStatsController';
 
@@ -13,5 +14,7 @@ playerStatsRouter.get('/', getPlayerStats);
 
 // POST /api/playerStats
 playerStatsRouter.post('/', addPlayerStats);
+
+playerStatsRouter.delete('/:id', deletePlayerStats);
 
 export default playerStatsRouter;

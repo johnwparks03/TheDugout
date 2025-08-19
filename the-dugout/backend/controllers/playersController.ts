@@ -39,3 +39,26 @@ export const addPlayer = async (
     res.status(500).send('Server Error');
   }
 };
+
+export const deletePlayer = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM players WHERE player_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+
+    res.status(200).json({
+      message: 'Player deleted successfully',
+      player: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error deleting player:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

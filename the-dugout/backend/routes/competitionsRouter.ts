@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import {
   addCompetition,
+  deleteCompetition,
   getCompetitions,
 } from '../controllers/competitionsController';
 
@@ -13,5 +14,8 @@ competitionsRouter.get('/', getCompetitions);
 
 // POST /api/competitions
 competitionsRouter.post('/', addCompetition);
+
+// DELETE /api/competitions
+competitionsRouter.delete('/:id', deleteCompetition);
 
 export default competitionsRouter;

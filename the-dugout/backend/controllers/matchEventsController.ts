@@ -24,7 +24,14 @@ export const addMatchEvent = async (
     return res.status(400).json({ errors: parseResult.error.message });
   }
 
-  const { match_id, minute, player_id, related_player_id, event_type, description } = req.body;
+  const {
+    match_id,
+    minute,
+    player_id,
+    related_player_id,
+    event_type,
+    description,
+  } = req.body;
 
   try {
     const result = await pool.query(
@@ -37,5 +44,28 @@ export const addMatchEvent = async (
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
+  }
+};
+
+export const deleteMatchEvent = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM match_events WHERE match_event_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Match event not found' });
+    }
+
+    res.status(200).json({
+      message: 'Match event deleted successfully',
+      matchEvent: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error deleting match event:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
