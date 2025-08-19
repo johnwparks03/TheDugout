@@ -47,5 +47,4 @@ Thumbs.db
 node_modules/
 
 .env
-
-.vscode/launch.json
+launch.json
